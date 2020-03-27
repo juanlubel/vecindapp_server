@@ -25,7 +25,9 @@ SECRET_KEY = '8werb^sp9pdlf#5j8y0^-f*t#^!y-ifuz_np#sdpguwmwl9v8q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'vecindapp-server.herokuapp.com'
+]
 
 # Application definition
 
