@@ -17,7 +17,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     # slug = models.SlugField(_('slug'), max_length=30, blank=True)
     telephone = models.CharField(_('telephone'), blank=True, max_length=9, default='')
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
-    is_premium_user = models.BooleanField(_('premium'), default=True)
+    is_premium_user = models.BooleanField(_('premium'), default=False)
     is_active = models.BooleanField(_('active'), default=True)
     is_staff = models.BooleanField(_('staff'), default=True)
 
@@ -36,13 +36,6 @@ class Profile(AbstractBaseUser, PermissionsMixin):
 
     @property
     def token(self):
-        """
-        Allows us to get a user's token by calling `user.token` instead of
-        `user.generate_jwt_token().
-
-        The `@property` decorator above makes this possible. `token` is called
-        a "dynamic property".
-        """
         return self._generate_jwt_token()
 
     def get_full_name(self):
@@ -53,10 +46,6 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         return self.first_name
 
     def _generate_jwt_token(self):
-        """
-        Generates a JSON Web Token that stores this user's ID and has an expiry
-        date set to 60 days into the future.
-        """
         dt = datetime.now() + timedelta(days=60)
 
         token = jwt.encode({
