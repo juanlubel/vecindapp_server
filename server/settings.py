@@ -26,6 +26,9 @@ SECRET_KEY = '8werb^sp9pdlf#5j8y0^-f*t#^!y-ifuz_np#sdpguwmwl9v8q'
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '0.0.0.0',
     'vecindapp-server.herokuapp.com'
 ]
 
@@ -41,7 +44,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
 
-    'server.authentication'
+    'server.authentication',
+    'server.profiles'
 ]
 
 MIDDLEWARE = [
@@ -87,8 +91,8 @@ DATABASES = {
 }
 
 # Heroku config
-db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
-DATABASES['default'].update(db_from_env)
+# db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -127,3 +131,17 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'authentication.Profile'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+
+        # 'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'server.authentication.middleware.JWTAuthentication',
+    ),
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer'
+    ]
+}
