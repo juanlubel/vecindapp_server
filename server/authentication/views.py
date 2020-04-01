@@ -1,8 +1,10 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from .serializers import ProfileSerializer, RegistrationSerializer, LoginSerializer
 from .models import Profile
+from .serializers import ProfileSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -12,6 +14,37 @@ from rest_framework.views import APIView
 class ProfileView(generics.ListCreateAPIView):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
+
+
+class ProfileRUD(APIView):
+    serializer_class = ProfileSerializer
+    queryset = Profile.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk=None):
+        queryset = self.queryset
+        user = get_object_or_404(queryset, pk=pk)
+        serializer = ProfileSerializer(user, many=False)
+        return Response(serializer.data)
+
+    def put(self, request, pk=None):
+        serializer_context = {'request': request}
+        user = get_object_or_404(self.queryset, pk=pk)
+        serializer_data = request.data.get('user', {})
+        serializer = self.serializer_class(
+            user,
+            context=serializer_context,
+            data=serializer_data,
+            partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, pk=None):
+        user = get_object_or_404(self.queryset, user__pk=pk)
+        res = user.delete()
+        return Response(res, status=status.HTTP_200_OK)
 
 
 class ProfileRegister(APIView):
