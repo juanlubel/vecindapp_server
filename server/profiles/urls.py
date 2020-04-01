@@ -25,4 +25,3 @@ urlpatterns = [
     url(r'^servicio/(?P<pk>[-\w]+)$', ServicioRUD.as_view(), name='Retrieve_Update_Delete'),
     url(r'^servicio/$', ServicioCreate.as_view(), name='Create'),
 ]
-
