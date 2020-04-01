@@ -1,14 +1,14 @@
 from rest_framework import serializers
 
-from .models import Propietario, Inquilino
+from .models import Propietario, Inquilino, Servicio
 from ..authentication.serializers import ProfileSerializer
 
 
 class PropietarioSerializer(serializers.ModelSerializer):
     user = ProfileSerializer(read_only=True)
-    bankAccount = serializers.CharField(allow_blank=True)
-    isAdmin = serializers.BooleanField()
-    isPresident = serializers.BooleanField()
+    bankAccount = serializers.CharField(allow_blank=True, required=False)
+    isAdmin = serializers.BooleanField(required=False, default=False)
+    isPresident = serializers.BooleanField(required=False, default=False)
 
     class Meta:
         model = Propietario
@@ -23,8 +23,8 @@ class PropietarioSerializer(serializers.ModelSerializer):
 
 class InquilinoSerializer(serializers.ModelSerializer):
     user = ProfileSerializer(read_only=True)
-    bankAccount = serializers.CharField(allow_blank=True)
-    canPublish = serializers.BooleanField()
+    bankAccount = serializers.CharField(allow_blank=True, required=False)
+    canPublish = serializers.BooleanField(required=False)
 
     class Meta:
         model = Inquilino
@@ -32,6 +32,22 @@ class InquilinoSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = self.context.get('user', None)
-        prop = Inquilino.objects.create(user=user, **validated_data)
+        inquilino = Inquilino.objects.create(user=user, **validated_data)
 
-        return prop
+        return inquilino
+
+
+class ServicioSerializer(serializers.ModelSerializer):
+    user = ProfileSerializer(read_only=True)
+    company = serializers.CharField()
+    typeOf = serializers.CharField()
+
+    class Meta:
+        model = Inquilino
+        fields = ('user', 'company', 'typeOf')
+
+    def create(self, validated_data):
+        user = self.context.get('user', None)
+        servicio = Servicio.objects.create(user=user, **validated_data)
+
+        return servicio
