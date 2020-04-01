@@ -24,3 +24,14 @@ class Inquilino(models.Model):
 
     def __str__(self):
         return self.user.first_name
+
+
+class Servicio(models.Model):
+    user = models.OneToOneField(
+        'authentication.Profile', on_delete=models.CASCADE
+    )
+    company = models.TextField()
+    typeOf = models.TextField()
+
+    def __str__(self):
+        return self.user.first_name
