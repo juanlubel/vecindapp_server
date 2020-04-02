@@ -20,5 +20,7 @@ from django.conf.urls import include, url
 urlpatterns = [
     path('admin/', admin.site.urls),
     url('api/', include(('server.authentication.urls', 'auth'), namespace='authentication')),
-    url('api/', include(('server.profiles.urls', 'profiles'), namespace='profiles'))
+    url('api/', include(('server.profiles.urls', 'profiles'), namespace='profiles')),
+    url('api/', include(('server.community.urls', 'profiles'), namespace='communities')),
+
 ]
