@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'server.authentication',
-    'server.profiles'
+    'server.profiles',
+    'server.community'
 ]
 
 MIDDLEWARE = [
