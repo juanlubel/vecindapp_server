@@ -6,7 +6,7 @@ from ..authentication.serializers import ProfileSerializer
 
 class PropietarioSerializer(serializers.ModelSerializer):
     user = ProfileSerializer(read_only=True)
-    owner = serializers.StringRelatedField(many=True)
+    owner = serializers.StringRelatedField(many=True, required=False)
     bankAccount = serializers.CharField(allow_blank=True, required=False)
     isAdmin = serializers.BooleanField(required=False, default=False)
     isPresident = serializers.BooleanField(required=False, default=False)
