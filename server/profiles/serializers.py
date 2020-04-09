@@ -24,7 +24,7 @@ class PropietarioSerializer(serializers.ModelSerializer):
 
 class InquilinoSerializer(serializers.ModelSerializer):
     user = ProfileSerializer(read_only=True)
-    renter = serializers.StringRelatedField(many=True)
+    renter = serializers.StringRelatedField(many=True, required=False)
     bankAccount = serializers.CharField(allow_blank=True, required=False)
     canPublish = serializers.BooleanField(required=False)
 

@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 
 class Propietario(models.Model):
     user = models.OneToOneField(
@@ -15,6 +13,10 @@ class Propietario(models.Model):
     isPresident = models.BooleanField('Presidente', default=False)
 
     def __str__(self):
+        return self.slug
+
+    @property
+    def slug(self):
         return self.user.first_name
 
 
@@ -29,6 +31,10 @@ class Inquilino(models.Model):
     canPublish = models.BooleanField('Puede publicar', default=False)
 
     def __str__(self):
+        return self.slug
+
+    @property
+    def slug(self):
         return self.user.first_name
 
 
@@ -43,4 +49,8 @@ class Servicio(models.Model):
     typeOf = models.TextField()
 
     def __str__(self):
+        return self.slug
+
+    @property
+    def slug(self):
         return self.user.first_name

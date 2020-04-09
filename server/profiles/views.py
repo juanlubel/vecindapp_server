@@ -19,8 +19,8 @@ class PropietarioCreate(APIView):
     queryset = Propietario.objects.all()
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, pk=None):
-        print(pk, request.user, request.data)
+    def post(self, request):
+        print(request.user, request.data)
         serializer_context = {
             'user': request.user,
             'request': request

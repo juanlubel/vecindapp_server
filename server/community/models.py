@@ -1,17 +1,24 @@
 from django.db import models
 
 
-# Create your models here.
-
-
 class Community(models.Model):
-    name = models.CharField(max_length=50, default='')
-    instalaciones = models.CharField(max_length=50, default='')
+    INSTALLATIONS_CHOICES = (
+        ('Piscina', 'Piscina'),
+        ('Parking', 'Parking'),
+        ('Trasteros', 'Trasteros'),
+        ('Jardin', 'Jardin'),
+        ('Parque', 'Parque')
+    )
+    name = models.CharField(max_length=50, default='', null=True, blank=True)
+    instalaciones = models.CharField(max_length=50, default='', null=True, blank=True, choices=INSTALLATIONS_CHOICES)
     direccion = models.OneToOneField(
         'community.Direction', on_delete=models.CASCADE
     )
     services = models.ManyToManyField(
-        'profiles.Servicio', related_name='employed'
+        'profiles.Servicio', related_name='employed', blank=True
+    )
+    president = models.ForeignKey(
+        'profiles.Propietario', on_delete=models.CASCADE, related_name='president', null=True, blank=True
     )
 
     def __str__(self):
@@ -26,14 +33,14 @@ class Community(models.Model):
 
 
 class Apartment(models.Model):
-    comunity = models.ForeignKey(
-        Community, on_delete=models.CASCADE
+    community = models.ForeignKey(
+        Community, on_delete=models.CASCADE, related_name='apartments'
     )
     owner = models.ForeignKey(
         'profiles.Propietario', on_delete=models.CASCADE, related_name='owner', null=True
     )
     renter = models.ManyToManyField(
-        'profiles.Inquilino', related_name='renter'
+        'profiles.Inquilino', related_name='renter', blank=True
     )
     piso = models.IntegerField()
     puerta = models.CharField(max_length=5)
@@ -47,8 +54,8 @@ class Apartment(models.Model):
     @property
     def slug(self):
         return \
-            self.comunity.direccion.avenida + ' n' + \
-            str(self.comunity.direccion.numero) + ' p' + \
+            self.community.direccion.avenida + ' n' + \
+            str(self.community.direccion.numero) + ' p' + \
             str(self.piso) + ' pta' + \
             self.puerta
 
