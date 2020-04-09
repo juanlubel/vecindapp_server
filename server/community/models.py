@@ -67,7 +67,7 @@ class Direction(models.Model):
         ('Plz', 'Plaza'),
         ('Ps', 'Paseo')
     )
-    via = models.CharField(max_length=5, choices=VIA_CHOICES)
+    via = models.CharField(max_length=5, choices=VIA_CHOICES, default='', blank=True)
     avenida = models.CharField(max_length=50)
     numero = models.IntegerField()
     portal = models.CharField(max_length=5, blank=True)
