@@ -19,8 +19,8 @@ class PropietarioCreate(APIView):
     queryset = Propietario.objects.all()
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, pk=None):
-        print(pk, request.user, request.data)
+    def post(self, request):
+        print(request.user, request.data)
         serializer_context = {
             'user': request.user,
             'request': request
@@ -125,14 +125,14 @@ class InquilinoRUD(APIView):
 
 
 class ServicioView(generics.ListAPIView):
-    serializer_class = InquilinoSerializer
-    queryset = Inquilino.objects.all()
+    serializer_class = ServicioSerializer
+    queryset = Servicio.objects.all()
     permission_classes = [IsAuthenticated]
 
 
 class ServicioCreate(APIView):
-    serializer_class = InquilinoSerializer
-    queryset = Inquilino.objects.all()
+    serializer_class = ServicioSerializer
+    queryset = Servicio.objects.all()
     permission_classes = [IsAuthenticated]
 
     def post(self, request):

@@ -1,0 +1,88 @@
+from rest_framework import serializers
+from .models import Community, Direction, Apartment
+from ..authentication.serializers import UserEmbeddedSerializer
+from ..profiles.serializers import InquilinoSerializer
+
+
+class DirectionSerializer(serializers.ModelSerializer):
+    via = serializers.CharField(max_length=10)
+    avenida = serializers.CharField(max_length=50)
+    numero = serializers.IntegerField()
+    portal = serializers.CharField(max_length=5, required=False, allow_blank=True)
+    codigoPostal = serializers.IntegerField()
+    poblacion = serializers.CharField(max_length=50)
+    provincia = serializers.CharField(max_length=50)
+
+    class Meta:
+        model = Direction
+        fields = (
+            'pk',
+            'via',
+            'avenida',
+            'numero',
+            'portal',
+            'codigoPostal',
+            'poblacion',
+            'provincia'
+        )
+
+
+class CommunityOnlySerializer(serializers.ModelSerializer):
+    slug = serializers.CharField(allow_blank=True, required=False)
+    name = serializers.CharField(allow_blank=True, required=False)
+    instalaciones = serializers.CharField(required=False, allow_blank=True)
+    president = UserEmbeddedSerializer()
+
+    class Meta:
+        model = Community
+        fields = ('pk', 'slug', 'instalaciones', 'name', 'president',)
+
+
+class ApartmentOnlySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Apartment
+        fields = ('pk', 'slug',)
+
+
+class ApartmentSerializer(serializers.ModelSerializer):
+    community = CommunityOnlySerializer(read_only=True)
+    owner = UserEmbeddedSerializer(read_only=True)
+    renter = UserEmbeddedSerializer(many=True, required=False)
+
+    class Meta:
+        model = Apartment
+        fields = ('pk', 'community', 'owner', 'renter', )
+
+
+class ApartmentRenterSerializer(serializers.ModelSerializer):
+    community = CommunityOnlySerializer(read_only=True)
+    renter = InquilinoSerializer(many=True)
+
+    class Meta:
+        model = Apartment
+        fields = ('pk', 'community','renter', )
+
+
+class CommunitySerializer(serializers.ModelSerializer):
+    slug = serializers.CharField(allow_blank=True, required=False)
+    name = serializers.CharField(allow_blank=True)
+    instalaciones = serializers.CharField(required=False, allow_blank=True)
+    direccion = DirectionSerializer(read_only=True)
+    apartments = ApartmentOnlySerializer(many=True, required=False)
+    president = UserEmbeddedSerializer(required=False, allow_null=True)
+    
+    class Meta:
+        model = Community
+        fields = (
+            'pk',
+            'slug',
+            'instalaciones',
+            'name',
+            'direccion',
+            'apartments',
+            'president'
+        )
+
+    # def get_president(self):
+
+

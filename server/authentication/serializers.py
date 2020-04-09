@@ -10,6 +10,12 @@ class ProfileSerializer(serializers.ModelSerializer):
         read_only_fields = ['slug']
 
 
+class UserEmbeddedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ('pk', 'slug')
+
+
 class RegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         max_length=128,

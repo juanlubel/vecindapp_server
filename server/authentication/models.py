@@ -32,7 +32,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
 
     @property
     def slug(self):
-        return 'slug'
+        return self.first_name
 
     @property
     def token(self):

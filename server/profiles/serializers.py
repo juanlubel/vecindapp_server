@@ -6,13 +6,14 @@ from ..authentication.serializers import ProfileSerializer
 
 class PropietarioSerializer(serializers.ModelSerializer):
     user = ProfileSerializer(read_only=True)
+    owner = serializers.StringRelatedField(many=True)
     bankAccount = serializers.CharField(allow_blank=True, required=False)
     isAdmin = serializers.BooleanField(required=False, default=False)
     isPresident = serializers.BooleanField(required=False, default=False)
 
     class Meta:
         model = Propietario
-        fields = ('user', 'isPresident', 'isAdmin', 'bankAccount')
+        fields = ('user', 'isPresident', 'isAdmin', 'bankAccount', 'owner')
 
     def create(self, validated_data):
         user = self.context.get('user', None)
@@ -23,12 +24,13 @@ class PropietarioSerializer(serializers.ModelSerializer):
 
 class InquilinoSerializer(serializers.ModelSerializer):
     user = ProfileSerializer(read_only=True)
+    renter = serializers.StringRelatedField(many=True, required=False)
     bankAccount = serializers.CharField(allow_blank=True, required=False)
     canPublish = serializers.BooleanField(required=False)
 
     class Meta:
         model = Inquilino
-        fields = ('user', 'canPublish', 'bankAccount')
+        fields = ('user', 'canPublish', 'bankAccount', 'renter')
 
     def create(self, validated_data):
         user = self.context.get('user', None)
@@ -39,12 +41,14 @@ class InquilinoSerializer(serializers.ModelSerializer):
 
 class ServicioSerializer(serializers.ModelSerializer):
     user = ProfileSerializer(read_only=True)
+    employed = serializers.StringRelatedField(many=True)
+    # community = serializers.StringRelatedField(many=True)
     company = serializers.CharField()
     typeOf = serializers.CharField()
 
     class Meta:
         model = Inquilino
-        fields = ('user', 'company', 'typeOf')
+        fields = ('user', 'company', 'typeOf', 'employed')
 
     def create(self, validated_data):
         user = self.context.get('user', None)
