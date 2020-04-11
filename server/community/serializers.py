@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Community, Direction, Apartment
 from ..authentication.serializers import UserEmbeddedSerializer
-from ..profiles.serializers import InquilinoSerializer
+from ..profiles.serializers import InquilinoSerializer, PropietarioSerializerField, InquilinoSerializerField
 
 
 class DirectionSerializer(serializers.ModelSerializer):
@@ -31,7 +31,7 @@ class CommunityOnlySerializer(serializers.ModelSerializer):
     slug = serializers.CharField(allow_blank=True, required=False)
     name = serializers.CharField(allow_blank=True, required=False)
     instalaciones = serializers.CharField(required=False, allow_blank=True)
-    president = UserEmbeddedSerializer()
+    president = PropietarioSerializerField()
 
     class Meta:
         model = Community
@@ -46,8 +46,8 @@ class ApartmentOnlySerializer(serializers.ModelSerializer):
 
 class ApartmentSerializer(serializers.ModelSerializer):
     community = CommunityOnlySerializer(read_only=True)
-    owner = UserEmbeddedSerializer(read_only=True)
-    renter = UserEmbeddedSerializer(many=True, required=False)
+    owner = PropietarioSerializerField(required=False)
+    renter = InquilinoSerializerField(many=True, required=False)
 
     class Meta:
         model = Apartment
@@ -69,7 +69,7 @@ class CommunitySerializer(serializers.ModelSerializer):
     instalaciones = serializers.CharField(required=False, allow_blank=True)
     direccion = DirectionSerializer(read_only=True)
     apartments = ApartmentOnlySerializer(many=True, required=False)
-    president = UserEmbeddedSerializer(required=False, allow_null=True)
+    president = PropietarioSerializerField(required=False, allow_null=True)
     
     class Meta:
         model = Community

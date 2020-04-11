@@ -207,23 +207,30 @@ class CommunityPresident(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk_c, pk_p):
-        print(pk_c, pk_p)
+        community = get_object_or_404(self.queryset, pk=pk_c)
         try:
             president = Propietario.objects.get(user__pk=pk_p)
         except Propietario.DoesNotExist:
             raise NotFound('This pk is not a Owner instance.')
+        print(community.president.user.pk, president.user.pk)
+        if community.president.user.pk is not president.user.pk:
+            old_president = Propietario.objects.get(user__pk=community.president.user.pk)
+            print(old_president, president)
+            old_president.isPresident = False
+            old_president.save()
 
-        community = get_object_or_404(self.queryset, pk=pk_c)
-        print(president.user.pk)
+        president.isPresident = True
+        president.save()
         community.president = president
         community.save()
 
         return Response(CommunitySerializer(community, many=False).data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk_c, pk_p):
-        print(pk_c)
         community = get_object_or_404(self.queryset, pk=pk_c)
-        print(community.president.pk)
+        president = Propietario.objects.get(user__pk=pk_p)
+        president.isPresident = False
+        president.save()
         community.president = None
         community.save()
 
@@ -253,7 +260,6 @@ class ApartmentRenter(APIView):
             renter = serializer.save()
 
         apartment = get_object_or_404(self.queryset, pk=pk_a)
-        print(apartment, type(renter).__name__)
         apartment.renter.add(renter)
         apartment.save()
 

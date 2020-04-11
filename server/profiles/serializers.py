@@ -22,6 +22,16 @@ class PropietarioSerializer(serializers.ModelSerializer):
         return prop
 
 
+class PropietarioSerializerField(serializers.RelatedField):
+    queryset = Propietario.objects.all()
+
+    def to_representation(self, value):
+        print('RELATED FIELD', value)
+        user = {"pk": value.user.pk,
+                "name": value.user.slug}
+        return user
+
+
 class InquilinoSerializer(serializers.ModelSerializer):
     user = ProfileSerializer(read_only=True)
     renter = serializers.StringRelatedField(many=True, required=False)
@@ -37,6 +47,16 @@ class InquilinoSerializer(serializers.ModelSerializer):
         inquilino = Inquilino.objects.create(user=user, **validated_data)
 
         return inquilino
+
+
+class InquilinoSerializerField(serializers.RelatedField):
+    queryset = Inquilino.objects.all()
+
+    def to_representation(self, value):
+        print('RELATED FIELD', value)
+        user = {"pk": value.user.pk,
+                "name": value.user.slug}
+        return user
 
 
 class ServicioSerializer(serializers.ModelSerializer):
