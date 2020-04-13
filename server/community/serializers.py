@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import Community, Direction, Apartment
-from ..authentication.serializers import UserEmbeddedSerializer
 from ..profiles.serializers import InquilinoSerializer, PropietarioSerializerField, InquilinoSerializerField
 
 

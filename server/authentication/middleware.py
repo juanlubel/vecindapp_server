@@ -15,7 +15,6 @@ def _authenticate_credentials(request, token):
         raise exceptions.AuthenticationFailed(msg)
 
     try:
-        print(payload)
         user = Profile.objects.get(pk=payload['id'])
     except Profile.DoesNotExist:
         msg = 'No user matching this token was found.'
@@ -32,7 +31,6 @@ class JWTAuthentication(authentication.BaseAuthentication):
     authentication_header_prefix = 'Bearer'
 
     def authenticate(self, request):
-        print('middleware!!')
         request.user = None
 
         auth_header = authentication.get_authorization_header(request).split()
@@ -50,7 +48,6 @@ class JWTAuthentication(authentication.BaseAuthentication):
 
         prefix = auth_header[0].decode('utf-8')
         token = auth_header[1].decode('utf-8')
-        print(prefix, auth_header_prefix, token)
 
         if prefix.lower() != auth_header_prefix:
             return None

@@ -215,7 +215,6 @@ class CommunityPresident(APIView):
         print(community.president.user.pk, president.user.pk)
         if community.president.user.pk is not president.user.pk:
             old_president = Propietario.objects.get(user__pk=community.president.user.pk)
-            print(old_president, president)
             old_president.isPresident = False
             old_president.save()
 

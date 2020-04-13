@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from .serializers import ProfileSerializer, RegistrationSerializer, LoginSerializer
+from .serializers import ProfileSerializer, RegistrationSerializer, LoginSerializer, UserEmbeddedSerializer
 from .models import Profile
 from .serializers import ProfileSerializer
 from rest_framework.response import Response
@@ -45,6 +45,19 @@ class ProfileRUD(APIView):
         user = get_object_or_404(self.queryset, user__pk=pk)
         res = user.delete()
         return Response(res, status=status.HTTP_200_OK)
+
+
+class IsRegisteredUser(APIView):
+    permission_classes = (AllowAny,)
+    queryset = Profile.objects.all()
+    serializer_class = UserEmbeddedSerializer
+
+    def post(self, request):
+        email = request.data.get('email', {})
+        queryset = self.queryset
+        user = get_object_or_404(queryset, email=email)
+        serializer = self.serializer_class(user, many=False)
+        return Response(serializer.data)
 
 
 class ProfileRegister(APIView):
