@@ -30,7 +30,7 @@ class ProfileRUD(APIView):
     def put(self, request, pk=None):
         serializer_context = {'request': request}
         user = get_object_or_404(self.queryset, pk=pk)
-        serializer_data = request.data.get('user', {})
+        serializer_data = request.data
         serializer = self.serializer_class(
             user,
             context=serializer_context,
@@ -65,7 +65,7 @@ class ProfileRegister(APIView):
     serializer_class = RegistrationSerializer
 
     def post(self, request):
-        user = request.data.get('user', {})
+        user = request.data
 
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
@@ -79,8 +79,8 @@ class ProfileLogin(APIView):
     serializer_class = LoginSerializer
 
     def post(self, request):
-        user = request.data.get('user', {})
-
+        user = request.data
+        print(user)
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         print(serializer.data)
