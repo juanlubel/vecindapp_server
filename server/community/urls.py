@@ -17,7 +17,7 @@ from .views import (
 
 urlpatterns = [
     url(r'^comunidades/$', CommunityView.as_view(), name='List'),
-    url(r'^comunidades/(?P<pk>[-\d]+)$', CommunitiesByUser.as_view(), name='List'),
+    url(r'^comunidadesByUser/$', CommunitiesByUser.as_view(), name='List'),
     url(r'^comunidad/$', CommunityCreate.as_view(), name='Create'),
     url(r'^comunidad/(?P<pk>[-\d]+)$', CommunityRUD.as_view(), name='Retrieve_Update_Delete'),
     url(r'^comunidad/(?P<pk_c>[-\d]+)/presidente/(?P<pk_p>[-\d]+)$', CommunityPresident.as_view(), name='President'),

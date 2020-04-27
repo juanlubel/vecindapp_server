@@ -114,8 +114,10 @@ class CommunitiesByUser(APIView):
     queryset = Community.objects.all()
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, pk=None):
+    def get(self, request):
         queryset = self.queryset
+        print(request.user.pk)
+        pk = request.user.pk
         # owners_comm = queryset.filter(apartments__owner__pk=pk)
         # renter_comm = queryset.filter(apartments__renter__pk=pk)
         # communities = owners_comm + renter_comm
