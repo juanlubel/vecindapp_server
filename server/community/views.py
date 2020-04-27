@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.exceptions import NotFound
@@ -106,6 +107,24 @@ class DirectionCreate(APIView):
         direcction = serializer.create(validated_data=serializer_data)
 
         return Response(DirectionSerializer(direcction, many=False).data, status=status.HTTP_201_CREATED)
+
+
+class CommunitiesByUser(APIView):
+    serializer_class = CommunitySerializer
+    queryset = Community.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk=None):
+        queryset = self.queryset
+        # owners_comm = queryset.filter(apartments__owner__pk=pk)
+        # renter_comm = queryset.filter(apartments__renter__pk=pk)
+        # communities = owners_comm + renter_comm
+        communities = queryset.filter(
+            Q(apartments__owner__pk=pk) |
+            Q(apartments__renter__pk=pk)
+        )
+        serializer = CommunitySerializer(communities, many=True)
+        return Response(serializer.data)
 
 
 class CommunityRUD(APIView):
