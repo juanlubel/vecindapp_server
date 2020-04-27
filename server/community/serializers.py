@@ -43,6 +43,12 @@ class ApartmentOnlySerializer(serializers.ModelSerializer):
         fields = ('pk', 'slug',)
 
 
+class ApartmentSerializerField(serializers.RelatedField):
+    class Meta:
+        model = Apartment
+        fields = ('pk', 'slug',)
+
+
 class ApartmentSerializer(serializers.ModelSerializer):
     community = CommunityOnlySerializer(read_only=True)
     owner = PropietarioSerializerField(required=False)
@@ -59,7 +65,7 @@ class ApartmentRenterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Apartment
-        fields = ('pk', 'community','renter', )
+        fields = ('pk', 'community', 'renter', )
 
 
 class CommunitySerializer(serializers.ModelSerializer):

@@ -49,7 +49,7 @@ class Apartment(models.Model):
     numCochera = models.CharField(max_length=25, blank=True)
 
     def __str__(self):
-        return self.slug
+        return str(self.pk)
 
     @property
     def slug(self):
