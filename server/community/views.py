@@ -118,12 +118,9 @@ class CommunitiesByUser(APIView):
         queryset = self.queryset
         print(request.user.pk)
         pk = request.user.pk
-        # owners_comm = queryset.filter(apartments__owner__pk=pk)
-        # renter_comm = queryset.filter(apartments__renter__pk=pk)
-        # communities = owners_comm + renter_comm
         communities = queryset.filter(
-            Q(apartments__owner__pk=pk) |
-            Q(apartments__renter__pk=pk)
+            Q(apartments__owner__user__pk=pk) |
+            Q(apartments__renter__user__pk=pk)
         )
         serializer = CommunitySerializer(communities, many=True)
         return Response(serializer.data)
