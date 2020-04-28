@@ -12,7 +12,8 @@ from .views import (
     DirectionRUD,
     CommunityPresident,
     ApartmentRenter,
-    CommunitiesByUser
+    CommunitiesByUser,
+    ApartmentsByUser
 )
 
 urlpatterns = [
@@ -23,6 +24,7 @@ urlpatterns = [
     url(r'^comunidad/(?P<pk_c>[-\d]+)/presidente/(?P<pk_p>[-\d]+)$', CommunityPresident.as_view(), name='President'),
 
     url(r'^viviendas/$', ApartmentView.as_view(), name='List'),
+    url(r'^viviendasByUser/$', ApartmentsByUser.as_view(), name='List'),
     url(r'^vivienda/$', ApartmentCreate.as_view(), name='Create'),
     url(r'^vivienda/(?P<pk>[-\d]+)$', ApartmentRUD.as_view(), name='Retrieve_Update_Delete'),
     url(r'^vivienda/(?P<pk_a>[-\d]+)/inquilino/(?P<pk_r>[-\d]+)$', ApartmentRenter.as_view(), name='Renter'),

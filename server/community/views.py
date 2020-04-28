@@ -122,7 +122,26 @@ class CommunitiesByUser(APIView):
             Q(apartments__owner__user__pk=pk) |
             Q(apartments__renter__user__pk=pk)
         )
-        serializer = CommunitySerializer(communities, many=True)
+        communities_list = list(dict.fromkeys(communities))
+        serializer = self.serializer_class(communities_list, many=True)
+        return Response(serializer.data)
+
+
+class ApartmentsByUser(APIView):
+    serializer_class = ApartmentSerializer
+    queryset = Apartment.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        queryset = self.queryset
+        print(request.user.pk)
+        pk = request.user.pk
+        apartments = queryset.filter(
+            Q(owner__user__pk=pk) |
+            Q(renter__user__pk=pk)
+        )
+        apartments_list = list(dict.fromkeys(apartments))
+        serializer = self.serializer_class(apartments_list, many=True)
         return Response(serializer.data)
 
 
