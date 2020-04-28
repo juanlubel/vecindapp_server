@@ -53,10 +53,16 @@ class ApartmentSerializer(serializers.ModelSerializer):
     community = CommunityOnlySerializer(read_only=True)
     owner = PropietarioSerializerField(required=False)
     renter = InquilinoSerializerField(many=True, required=False)
+    piso = serializers.IntegerField()
+    puerta = serializers.CharField(allow_blank=True)
+    escalera = serializers.CharField(allow_blank=True)
+    numTrastero = serializers.CharField(allow_blank=True)
+    numCochera = serializers.CharField(allow_blank=True)
 
     class Meta:
         model = Apartment
-        fields = ('pk', 'community', 'owner', 'renter', )
+        fields = ('pk', 'community', 'owner', 'renter', 'piso', 'puerta', 'escalera', 'numTrastero',
+                  'numCochera')
 
 
 class ApartmentRenterSerializer(serializers.ModelSerializer):
