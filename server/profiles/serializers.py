@@ -29,7 +29,16 @@ class PropietarioSerializerField(serializers.RelatedField):
         print('RELATED FIELD', value)
         user = {"pk": value.user.pk,
                 "name": value.user.slug}
+
         return user
+
+
+class PropietarioOnlySerializer(serializers.ModelSerializer):
+    name = serializers.CharField(allow_blank=True, required=False)
+
+    class Meta:
+        model = Propietario
+        fields = ('pk', 'name',)
 
 
 class InquilinoSerializer(serializers.ModelSerializer):

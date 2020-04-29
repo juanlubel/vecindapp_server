@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from ..profiles.models import Propietario, Inquilino
-from ..profiles.serializers import InquilinoSerializer
+from ..profiles.serializers import InquilinoSerializer, PropietarioSerializerField, PropietarioSerializer
 from ..authentication.models import Profile
 from ..authentication.serializers import ProfileSerializer
 
@@ -71,18 +71,32 @@ class ApartmentCreate(APIView):
         except Direction.DoesNotExist:
             raise NotFound('Community not found.')
         print(request.user.id)
-        owner = Propietario.objects.get(user__pk=request.user.id)
+        try:
+            owner = Propietario.objects.get(user__pk=request.user.id)
+        except Direction.DoesNotExist:
+            serializer_context = {
+                'request': request,
+                'user': Profile.objects.get(pk=request.user.id)
+            }
+            serializer_data = {
 
+            }
+            print(serializer_context)
+            serializer = PropietarioSerializer(data=serializer_data, context=serializer_context)
+            serializer.is_valid(raise_exception=True)
+            owner = serializer.save()
+        print(owner)
         serializer_context = {
             'request': request
         }
         serializer_data = request.data.get('vivienda', {})
         serializer_data['community'] = community
         serializer_data['owner'] = owner
+        print(serializer_data)
         serializer = self.serializer_class(
             data=serializer_data, context=serializer_context
         )
-        serializer.is_valid(raise_exception=True)
+        # serializer.is_valid(raise_exception=True)
         print(serializer_data)
         apartment = serializer.create(validated_data=serializer_data)
 

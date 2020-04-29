@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Community, Direction, Apartment
-from ..profiles.serializers import InquilinoSerializer, PropietarioSerializerField, InquilinoSerializerField
+from ..profiles.serializers import InquilinoSerializer, PropietarioSerializerField, InquilinoSerializerField, \
+    PropietarioSerializer
 
 
 class DirectionSerializer(serializers.ModelSerializer):
@@ -51,7 +52,7 @@ class ApartmentSerializerField(serializers.RelatedField):
 
 class ApartmentSerializer(serializers.ModelSerializer):
     community = CommunityOnlySerializer(read_only=True)
-    owner = PropietarioSerializerField(required=False)
+    owner = PropietarioSerializerField()
     renter = InquilinoSerializerField(many=True, required=False)
     piso = serializers.IntegerField()
     puerta = serializers.CharField(allow_blank=True)

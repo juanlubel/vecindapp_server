@@ -1,4 +1,5 @@
 from django.db import models
+from ..profiles.models import Propietario
 
 
 class Community(models.Model):
@@ -37,7 +38,7 @@ class Apartment(models.Model):
         Community, on_delete=models.CASCADE, related_name='apartments'
     )
     owner = models.ForeignKey(
-        'profiles.Propietario', on_delete=models.CASCADE, related_name='owner', null=True
+        Propietario, on_delete=models.CASCADE, related_name='owner', null=True
     )
     renter = models.ManyToManyField(
         'profiles.Inquilino', related_name='renter', blank=True
