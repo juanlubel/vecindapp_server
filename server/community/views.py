@@ -73,7 +73,7 @@ class ApartmentCreate(APIView):
         print(request.user.id)
         try:
             owner = Propietario.objects.get(user__pk=request.user.id)
-        except Direction.DoesNotExist:
+        except Propietario.DoesNotExist:
             serializer_context = {
                 'request': request,
                 'user': Profile.objects.get(pk=request.user.id)
